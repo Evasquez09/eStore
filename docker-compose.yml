@@ -1,0 +1,43 @@
+version: '2'
+services:
+  app:
+    image: davidzapata/php-composer-alpine:latest
+    ports:
+      - "80:80"
+    command: php artisan serve --host=0.0.0.0 --port=80
+    volumes:
+      - .:/var/www
+    networks:
+      - devnet
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - devnet
+  mysql:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: estore
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+      - devnet
+  node:
+    image: node:alpine
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+networks:
+  devnet:
+    driver: "bridge"
+volumes:
+  mysqldata:
+    driver: "local"
