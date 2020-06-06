@@ -7,8 +7,9 @@ Web system for Online Stores
 ```shell script
 git clone https://github.com/jdavidzapatab/eStore.git
 cd eStore
-docker-compose up -d
 cp .env.example .env
+docker-compose build app
+docker-compose up -d
 docker-compose exec app composer install
 docker-compose exec app php artisan key:generate
 ```
@@ -21,6 +22,12 @@ docker-compose exec app php artisan key:generate
 git checkout dev
 docker-compose up -d
 docker-compose exec app vendor/bin/phpunit
+```
+
+To shut down:
+
+```shell script
+docker-compose down
 ```
 
 ## License
