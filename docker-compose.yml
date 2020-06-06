@@ -1,45 +1,67 @@
-version: '2'
+version: "3.7"
 services:
   app:
-    image: richarvey/nginx-php-fpm:latest
-    restart: always
-    environment:
-      WEBROOT: /var/www/html/public
-    ports:
-      - "80:80"
+    build:
+      args:
+        user: john
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: estore
+    container_name: estore-app
+    restart: unless-stopped
+    working_dir: /var/www/
     volumes:
-      - .:/var/www/html
+      - ./:/var/www
     networks:
-      - devnet
-  redis:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
-    networks:
-      - devnet
-  mysql:
-    image: mysql:latest
+      - estore
+  db:
+    image: mysql:8
+    env_file:
+      - .env
+    container_name: estore-db
     command: --default-authentication-plugin=mysql_native_password
-    restart: always
+    restart: unless-stopped
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: estore
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
     volumes:
-      - mysqldata:/var/lib/mysql
+      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+      - ./storage/db:/var/lib/mysql
     networks:
-      - devnet
+      - estore
+  nginx:
+    image: nginx:1.19-alpine
+    container_name: estore-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d
+    networks:
+      - estore
+  redis:
+    image: redis:6-alpine
+    container_name: estore-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - estore
   node:
-    image: node:alpine
+    image: node:lts-alpine
+    container_name: estore-node
     working_dir: /var/www
     volumes:
       - .:/var/www
+    networks:
+      - estore
 networks:
-  devnet:
-    driver: "bridge"
-volumes:
-  mysqldata:
-    driver: "local"
+  estore:
+    driver: bridge
