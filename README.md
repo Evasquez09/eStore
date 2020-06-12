@@ -24,6 +24,12 @@ docker-compose up -d
 docker-compose exec app vendor/bin/phpunit
 ```
 
+To compile the public assets, run in a separated console:
+
+```shell script
+docker-compose run node npm run watch
+```
+
 To shut down:
 
 ```shell script

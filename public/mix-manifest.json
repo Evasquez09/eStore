@@ -1,4 +1,8 @@
 {
+    "/js/admin/app.js": "/js/admin/app.js",
     "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/css/admin/app.css": "/css/admin/app.css",
+    "/images/estore-logo-1000x292.png": "/images/estore-logo-1000x292.png",
+    "/images/icon-300x300.png": "/images/icon-300x300.png"
 }

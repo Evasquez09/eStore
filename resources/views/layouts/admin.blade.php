@@ -7,13 +7,13 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'Laravel') }} | Admin</title>
 
         <!-- Scripts -->
-        <script src="{{ asset('js/app.js') }}" defer></script>
+        <script src="{{ asset('js/admin/app.js') }}" defer></script>
 
         <!-- Styles -->
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/admin/app.css') }}" rel="stylesheet">
 
         <link rel="icon" href="{{ asset('images/icon-300x300.png') }}" type="image/png" sizes="300x300">
     </head>
@@ -35,15 +35,15 @@
                 <div id="navbarBasicExample" class="navbar-menu">
                     <div class="navbar-start">
                         <router-link to="/" class="navbar-item">Home</router-link>
-                        <router-link to="/bar" class="navbar-item">Go to Bar</router-link>
+                        <router-link to="/admin2" class="navbar-item">Go to Bar</router-link>
                     </div>
                 </div>
 
                 <div class="navbar-end">
                     <div class="navbar-item">
                         <div class="buttons">
-                            <a class="button is-light" href="{{ route('admin') }}">
-                                Admin
+                            <a class="button is-light" href="{{ route('home') }}">
+                                Public Site
                             </a>
                         </div>
                     </div>
@@ -52,9 +52,7 @@
 
             <section class="section">
                 <div class="container">
-
                     @yield('content')
-
                 </div>
             </section>
         </div>
